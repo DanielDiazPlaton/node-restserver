@@ -13,20 +13,30 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-app.get('/usuario', (req, res) => {
+app.get('/usuario', function(req, res) {
     res.json('Get usuario');
 });
 
-app.post('/usuario', (req, res) => {
+app.post('/usuario', function(req, res) {
 
     let body = req.body;
 
-    res.json({
-        body
-    });
+    if (body.nombre === undefined) {
+        res.status(400).json({
+            ok: false,
+            mensaje: "El nombre es necesario"
+        });
+    } else {
+        res.json({
+            persona: body
+        });
+
+    }
+
+
 });
 
-app.put('/usuario/:id', (req, res) => {
+app.put('/usuario/:id', function(req, res) {
 
     let id = req.params.id;
 
@@ -35,7 +45,7 @@ app.put('/usuario/:id', (req, res) => {
     });
 });
 
-app.delete('/usuario', (req, res) => {
+app.delete('/usuario', function(req, res) {
     res.json('Delete usuario');
 });
 
