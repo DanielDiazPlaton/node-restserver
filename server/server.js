@@ -3,6 +3,8 @@
 require('./config/config');
 
 const express = require('express');
+const mongoose = require('mongoose'); // Libreria de mongoDb
+
 const app = express();
 
 const bodyParser = require('body-parser');
@@ -13,40 +15,32 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-app.get('/usuario', function(req, res) {
-    res.json('Get usuario');
-});
-
-app.post('/usuario', function(req, res) {
-
-    let body = req.body;
-
-    if (body.nombre === undefined) {
-        res.status(400).json({
-            ok: false,
-            mensaje: "El nombre es necesario"
-        });
-    } else {
-        res.json({
-            persona: body
-        });
-
-    }
+// importe la ruta delusuario.js para las peticiones GET,PUT,POST,DELETE
+app.use(require('./routes/usuario'));
 
 
-});
 
-app.put('/usuario/:id', function(req, res) {
+// mongoose.connect('mongodb://localhost:27017/cafe', (err, res) => {
+//     if (err) throw err;
 
-    let id = req.params.id;
+//     console.log('Connection Database is Successfully!');
 
-    res.json({
-        id
-    });
-});
+// });
 
-app.delete('/usuario', function(req, res) {
-    res.json('Delete usuario');
+
+/**
+ * En dado caso de que la tabla no este creada, al hacer la peticion
+ * post se crea la tabla en mongoDB
+ * mongodb+srv://daniel:<password>@cluster0.vfexv.mongodb.net/cafe
+ */
+mongoose.connect(process.env.URLDB, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+}, (err, res) => {
+    if (err) throw err;
+
+    console.log('Connection Database is Successfully!');
 });
 
 app.listen(process.env.PORT, () => {
