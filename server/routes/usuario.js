@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt');
 const _ = require('underscore');
 
 const Usuario = require('../models/usuario'); // creo la constante para crear la instancia
+const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
 
 
 const app = express();
@@ -16,7 +17,7 @@ const app = express();
  * el error.
  * 
  */
-app.get('/usuario', function(req, res) {
+app.get('/usuario', verificaToken, (req, res) => {
 
     let desde = req.query.desde || 0;
     desde = Number(desde);
@@ -51,7 +52,7 @@ app.get('/usuario', function(req, res) {
 
 });
 
-app.post('/usuario', function(req, res) {
+app.post('/usuario', [verificaToken, verificaAdmin_Role], function(req, res) {
 
     let body = req.body;
 
@@ -100,7 +101,7 @@ app.post('/usuario', function(req, res) {
  * Actualizo a los usuarios a traves del metodo PUT con el id
  * 
  */
-app.put('/usuario/:id', function(req, res) {
+app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
 
     let id = req.params.id;
 
@@ -140,7 +141,7 @@ app.put('/usuario/:id', function(req, res) {
 
 });
 
-app.delete('/usuario/:id', function(req, res) {
+app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
 
     let id = req.params.id;
 

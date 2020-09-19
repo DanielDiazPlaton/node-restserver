@@ -15,9 +15,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-// importe la ruta delusuario.js para las peticiones GET,PUT,POST,DELETE
-app.use(require('./routes/usuario'));
-
+// Configuracion global de rutas del archivo index.js para las peticiones GET,PUT,POST,DELETE
+app.use(require('./routes/index.js'));
 
 
 // mongoose.connect('mongodb://localhost:27017/cafe', (err, res) => {
