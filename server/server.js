@@ -4,6 +4,7 @@ require('./config/config');
 
 const express = require('express');
 const mongoose = require('mongoose'); // Libreria de mongoDb
+const path = require('path');
 
 const app = express();
 
@@ -14,6 +15,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
 app.use(bodyParser.json())
+
+// Habilitar la carpeta public donde se alojara la pagina web
+app.use(express.static(path.resolve(__dirname, '../public')));
+
 
 // Configuracion global de rutas del archivo index.js para las peticiones GET,PUT,POST,DELETE
 app.use(require('./routes/index.js'));
